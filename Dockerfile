@@ -3,7 +3,7 @@ FROM alpine:latest as builder
 COPY . /srv
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories \
     && apk add --no-cache --virtual .build-deps go \
-    && cd srv; env CGO_ENABLED=0 GOPROXY=https://goproxy.cn,direct go build -ldflags="-s -w" -o /khmusic
+    && cd /srv; env CGO_ENABLED=0 GOPROXY=https://goproxy.cn,direct go build -ldflags="-s -w" -o /khmusic
 
 FROM alpine:latest
 
