@@ -110,7 +110,7 @@ func pathExists(path string) (bool, error) {
 func main() {
 	// 指定命令行默认参数
 	flag.StringVar(&config.ffmpegPath, "f", "/usr/bin/ffmpeg", "FFMpeg 路径（绝对路径）")
-	flag.StringVar(&config.m3u8Dir, "h", "/www", "HLS 流路径（末尾不要有斜杠）")
+	flag.StringVar(&config.m3u8Dir, "h", "/www/khmusic", "HLS 流路径（末尾不要有斜杠）")
 	flag.Parse()
 	log.Println("FFmpeg 路径为", config.ffmpegPath)
 	log.Println("HLS 流将会存放至", config.m3u8Dir)
