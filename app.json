@@ -3,8 +3,8 @@
     "description": "在 Heroku 上部署光华之声直播流",
     "keywords": ["光华之声"],
     "env": {
-        "ID": {
-            "description": "HTTP_ENABLED",
+        "HTTP_ENABLED": {
+            "description": "Enable HTTP server",
             "value": "true"
         }
     },
