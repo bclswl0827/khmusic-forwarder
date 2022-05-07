@@ -1,0 +1,14 @@
+{
+    "name": "光华之声",
+    "description": "在 Heroku 上部署光华之声直播流",
+    "keywords": ["光华之声"],
+    "env": {
+        "ID": {
+            "description": "HTTP_ENABLED",
+            "value": "true"
+        }
+    },
+    "website": "https://ibcl.us",
+    "repository": "https://github.com/bclswl0827/khmusic-forwarder",
+    "stack": "container"
+} 
