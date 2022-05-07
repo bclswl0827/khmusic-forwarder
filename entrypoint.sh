@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# 根据条件判断是否启用 HTTP 服务
 if [ $HTTP_ENABLED ]; then
     echo "$(date '+%Y/%m/%d %H:%M:%S') HTTP 服务已被启用"
     # 在 Heroku 等平台上，存在值为随机数的 PORT 变量
@@ -14,6 +15,12 @@ if [ $HTTP_ENABLED ]; then
             exit 1
         fi
     fi
+fi
+
+# 根据条件判断是否一并转发汉声电台
+if [ $VOH_ENABLED ]; then
+    echo "$(date '+%Y/%m/%d %H:%M:%S') 汉声电台将被一并转发"
+    /usr/bin/voh &
 fi
 
 # 启动转发进程

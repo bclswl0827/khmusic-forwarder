@@ -6,9 +6,13 @@
         "HTTP_ENABLED": {
             "description": "是否启动 HTTP 服务（true | false），如非必要，请保持默认",
             "value": "true"
+        },
+        "VOH_ENABLED": {
+            "description": "是否转发汉声电台节目（true | false），如非必要，请保持默认",
+            "value": "true"
         }
     },
-    "website": "https://ibcl.us",
+    "website": "https://ibcl.us/KHmusic-Relay_20220507/",
     "repository": "https://github.com/bclswl0827/khmusic-forwarder",
     "stack": "container"
 } 
