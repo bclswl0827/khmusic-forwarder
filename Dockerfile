@@ -15,7 +15,8 @@ ENV HTTP_ENABLED=false \
     HTTP_PORT=80
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories \
     && apk add --no-cache ffmpeg python3 \
-    && mkdir -p /www
+    && mkdir -p /www \
+    && chmod 755 /entrypoint.sh
 
 VOLUME ["/www"]
 ENTRYPOINT ["/entrypoint.sh"]
