@@ -46,10 +46,12 @@ func urlPraser(myUrl string, urlParam string) int64 {
 // 解析 HTML 页面内部流媒体链接
 func getLink() {
 	log.Println("开始解析并获取流媒体地址")
-	for i := 0; i < 4; i++ {
-		res, err := http.Get("https://audio.voh.com.tw/KwongWah/m3u8.aspx")
+	for {
+		// 3 秒超时
+		client := http.Client{Timeout: 3 * time.Second}
+		res, err := client.Get("https://audio.voh.com.tw/KwongWah/m3u8.aspx")
 		if err != nil {
-			log.Println("因网络问题导致解析失败，重试中")
+			log.Println("因网络超时而重试中")
 			continue
 		}
 		defer res.Body.Close()
@@ -73,11 +75,12 @@ func getLink() {
 func ffmpeg(hlsLink string, hoursAvail int64, ffmpegPath string, m3u8Dir string) {
 	for {
 		// 启动 FFmpeg
-		args := []string{"-i", hlsLink, "-max_reload", "2147483647",
-			"-m3u8_hold_counters", "2147483647", "-c", "copy",
-			"-segment_list_flags", "+live", "-hls_time", "4",
-			"-hls_list_size", "6", "-hls_wrap", "10",
-			"-segment_list_type", "m3u8", "-map", "0:0", "-map", "0:1",
+		args := []string{"-y", "-nostats", "-nostdin", "-hide_banner",
+			"-reconnect", "1", "-reconnect_at_eof", "1", "-reconnect_streamed", "1",
+			"-reconnect_delay_max", "0", "-timeout", "2000000000", "-thread_queue_size", "5512",
+			"-fflags", "+genpts", "-probesize", "10000000", "-analyzeduration", "15000000",
+			"-i", hlsLink, "-c", "copy", "-segment_list_flags", "+live", "-hls_time", "4",
+			"-hls_list_size", "6", "-hls_wrap", "10", "-segment_list_type", "m3u8",
 			"-segment_time", "4", m3u8Dir + "/index.m3u8"}
 		cmd := exec.Command(ffmpegPath, args...)
 		err := cmd.Start()
