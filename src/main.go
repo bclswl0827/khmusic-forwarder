@@ -124,8 +124,8 @@ func main() {
 		panic(err)
 	}
 	if !dirExist {
-		// 创建文件夹
-		err := os.Mkdir(config.m3u8Dir, os.ModePerm)
+		// 创建多级文件夹
+		err := os.MkdirAll(config.m3u8Dir, os.ModePerm)
 		if err != nil {
 			panic(err)
 		}
