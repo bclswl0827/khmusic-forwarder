@@ -20,8 +20,8 @@ fi
 # 根据条件判断是否一并转发汉声电台
 if [ $VOH_ENABLED ]; then
     echo "$(date '+%Y/%m/%d %H:%M:%S') 汉声电台将被一并转发"
-    /usr/bin/voh &
+    /usr/local/bin/voh &
 fi
 
 # 启动转发进程
-/usr/bin/khmusic
+/usr/local/bin/khmusic
