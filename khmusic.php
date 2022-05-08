@@ -51,38 +51,115 @@ function parseKhmusic() {
     return str_replace('playlist', 'chunklist', $regExp[0][0]);
 }
 
+// 汉声电台 API 获取 HLS 地址
+function parseVoh($stationNum) {
+    // 构造请求体参数
+    $postData = array('http' =>
+        array(
+            'method' => 'POST',
+            'header' => 'Content-type: application/x-www-form-urlencoded; charset=UTF-8',
+            'content' => http_build_query(
+                array(
+                    'Type' => 'VideoDisplay',
+                    'PlayChannel' => $stationNum
+                )
+            )
+        )
+    );
+
+    $apiRes = file_get_contents(
+        'https://audio.voh.com.tw/API/ugC_ProgramHandle.ashx',
+        false,
+        stream_context_create($postData)
+    );
+    $jsonArray = json_decode($apiRes, true);
+    return $jsonArray['Url'] . '?token=' . $jsonArray['token'] . '&expires=' . $jsonArray['expires'];
+}
+
+// 获取 URL 传递的参数
+switch ($_GET['station']) {
+    case 'khmusic':
+        $userSelect = 'khmusic';
+        $baseUrl = 'https://vohradiow-hichannel.cdn.hinet.net/live/RA000077';
+        break;
+    case 'voh_fm':
+        $userSelect = 'voh_fm';
+        $vohId = '1';
+        $baseUrl = 'https://vohradiow-hichannel.cdn.hinet.net/live/RA000076';
+        break;
+    case 'voh_am':
+        $userSelect = 'voh_am';
+        $vohId = '2';
+        $baseUrl = 'https://vohradiow-hichannel.cdn.hinet.net/live/RA000074';
+        break;
+    default:
+        echo '<html>
+                <head>
+                    <title>403 Forbidden</title>
+                </head>
+                <body>
+                    <div id="msg">
+                        <p>请选择一个电台。</p>
+                        <ul>
+                            <li>
+                                <a href="?station=khmusic" target="_blank">光华之声</a>
+                            </li>
+                            <li>
+                                <a href="?station=voh_fm" target="_blank">汉声 FM</a>
+                            </li>
+                            <li>
+                                <a href="?station=voh_am" target="_blank">汉声 AM</a>
+                            </li>
+                        </ul>
+                    </div>
+                </body>
+            </html>';
+        throw new Exception("Value must be 1 or below");
+}
 
 // 检查文件夹是否存在
 if (!is_dir($tmpDir)) {
     // 若文件夹不存在，则先建立一个
     mkdir($tmpDir, 0755, true);
     // 获取 M3U8 地址
-    $m3u8Link = parseKhmusic();
+    if ($userSelect == 'khmusic') {
+        $m3u8Link = parseKhmusic();
+    } else {
+        $m3u8Link = parseVoh($vohId);
+    }
     // 内容写入到文件
     $liveToken = parseUrl($m3u8Link, 'token');
     $liveExpiration = parseUrl($m3u8Link, 'expiration');
-    saveData('khmusic', $liveToken, $liveExpiration, $tmpDir);
+    saveData($userSelect, $liveToken, $liveExpiration, $tmpDir);
 } else {
-    if (!file_exists($tmpDir . '/khmusic_token.txt') && !file_exists($tmpDir . '/khmusic_expiration.txt')) {
+    if (!file_exists($tmpDir . '/' . $userSelect . '_token.txt') && !file_exists($tmpDir . '/' . $userSelect . '_expiration.txt')) {
         // 获取 M3U8 地址
-        $m3u8Link = parseKhmusic();
+        if ($userSelect == 'khmusic') {
+            $m3u8Link = parseKhmusic();
+        } else {
+            $m3u8Link = parseVoh($vohId);
+        }
         // 内容写入到文件
         $liveToken = parseUrl($m3u8Link, 'token');
         $liveExpiration = parseUrl($m3u8Link, 'expiration');
-        saveData('khmusic', $liveToken, $liveExpiration, $tmpDir);
+        saveData($userSelect, $liveToken, $liveExpiration, $tmpDir);
     } else {
         // 检查 Token 是否过期，未过期则直接读取原有的 Token
-        if (!validTime(readData($tmpDir, 'khmusic', 'expiration'))) {
-            // 重新获取 M3U8 地址
-            $m3u8Link = parseKhmusic();
+        if (!validTime(readData($tmpDir, $userSelect, 'expiration'))) {
+            // 获取 M3U8 地址
+            if ($userSelect == 'khmusic') {
+                $m3u8Link = parseKhmusic();
+            } else {
+                $m3u8Link = parseVoh($vohId);
+            }
             // 内容写入到文件
             $liveToken = parseUrl($m3u8Link, 'token');
             $liveExpiration = parseUrl($m3u8Link, 'expiration');
-            saveData('khmusic', $liveToken, $liveExpiration, $tmpDir);
+            saveData($userSelect, $liveToken, $liveExpiration, $tmpDir);
         } else {
             // 从文件读取原有 Token
-            $liveToken = readData($tmpDir, 'khmusic', 'token');
-            $m3u8Link = 'https://vohradiow-hichannel.cdn.hinet.net/live/RA000077/chunklist.m3u8?token=' . $liveToken . '&expires=' . readData($tmpDir, 'khmusic', 'expiration');
+            $liveToken = readData($tmpDir, $userSelect, 'token');
+            $m3u8Link = $baseUrl . '/chunklist.m3u8?token=' . $liveToken . '&expires=' . readData($tmpDir, $userSelect, 'expiration');
         }
     }
 
@@ -93,6 +170,6 @@ $streamContents = file_get_contents($m3u8Link);
 
 // 返回 M3U8 内容
 header('Content-Type: application/vnd.apple.mpegurl');
-echo str_replace('media_', 'https://vohradiow-hichannel.cdn.hinet.net/live/RA000077/media_', $streamContents);
+echo str_replace('media_', $baseUrl . '/media_', $streamContents);
 
 ?>
