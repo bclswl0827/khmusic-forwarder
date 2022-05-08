@@ -1,7 +1,11 @@
 <?php
 
+// HiNet CDN 地址为 vohradiow-hichannel.cdn.hinet.net
+// 若将来被屏蔽，可以自行搭建反代，并替换掉下面的 URL
+$hinetUrl = 'https://vohradiow-hichannel.cdn.hinet.net/live';
+
 // 设置缓存目录（存放 Token 和过期时间等）
-$tmpDir = './live_conf';
+$tmpDir = './live_cache';
 
 // 用于保存数据
 function saveData($baseName, $liveToken, $liveExpiration, $saveDir) {
@@ -80,17 +84,17 @@ function parseVoh($stationNum) {
 switch ($_GET['station']) {
     case 'khmusic':
         $userSelect = 'khmusic';
-        $baseUrl = 'https://vohradiow-hichannel.cdn.hinet.net/live/RA000077';
+        $baseUrl = $hinetUrl . '/RA000077';
         break;
     case 'voh_fm':
         $userSelect = 'voh_fm';
         $vohId = '1';
-        $baseUrl = 'https://vohradiow-hichannel.cdn.hinet.net/live/RA000076';
+        $baseUrl = $hinetUrl . '/RA000076';
         break;
     case 'voh_am':
         $userSelect = 'voh_am';
         $vohId = '2';
-        $baseUrl = 'https://vohradiow-hichannel.cdn.hinet.net/live/RA000074';
+        $baseUrl = $hinetUrl . '/RA000074';
         break;
     default:
         echo '<html>
