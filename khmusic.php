@@ -24,8 +24,10 @@ function readData($readDir, $baseName, $readType) {
 
 // 获取直播流可用时长，并提前一小时，返回布尔值
 function validTime($unixTime) {
-    $currentTime = strtotime('now');
-    $validHours = (strtotime($currentTime) - strtotime($unixTime)) / (60 * 60);
+    // 透过 UTC 时间计算
+    $currentTime = gmdate('Y-m-d H:i:s');
+    $futureTime = date("Y-m-d H:i:s", $unixTime - 8);
+    $validHours = (strtotime($futureTime) - strtotime($currentTime)) / 3600;
     // 小于 1 小时则过期，返回 false，反之返回 true
     if ($validHours < 1) {
         return true;
