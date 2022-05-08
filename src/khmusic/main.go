@@ -25,8 +25,10 @@ type mediaInfo struct {
 
 // 获取直播流可用时长，并提前一小时
 func validTime(uTime int64) int64 {
-	currentTime := time.Now().UTC()
-	futureTime := time.Unix(uTime, 0).UTC()
+	// 获取本地 UTC 时间
+	currentTime := time.Now().Local().UTC()
+	// 解析传入的 Unix 时间戳，转为 UTC 时间
+	futureTime := time.Unix(uTime, 0).Add(-8 * time.Hour).Local().UTC()
 	validHours, _ := strconv.ParseInt(fmt.Sprintf("%.f", futureTime.Sub(currentTime).Hours()), 10, 64)
 	return validHours - 1
 }
