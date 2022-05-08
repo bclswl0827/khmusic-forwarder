@@ -83,17 +83,17 @@ function parseVoh($stationNum) {
 }
 
 // 获取 URL 传递的参数
-switch ($_GET['station']) {
-    case 'khmusic':
+switch ($_GET['live']) {
+    case 'khmusic.m3u8':
         $userSelect = 'khmusic';
         $baseUrl = $hinetUrl . '/RA000077';
         break;
-    case 'voh_fm':
+    case 'voh_fm.m3u8':
         $userSelect = 'voh_fm';
         $vohId = '1';
         $baseUrl = $hinetUrl . '/RA000076';
         break;
-    case 'voh_am':
+    case 'voh_am.m3u8':
         $userSelect = 'voh_am';
         $vohId = '2';
         $baseUrl = $hinetUrl . '/RA000074';
@@ -101,20 +101,20 @@ switch ($_GET['station']) {
     default:
         echo '<html>
                 <head>
-                    <title>500 Error</title>
+                    <title>请选择</title>
                 </head>
                 <body>
                     <div id="msg">
                         <h2>请选择一个电台</h2>
                         <ul>
                             <li>
-                                <a href="?station=khmusic" target="_blank">光华之声</a>
+                                <a href="?live=khmusic.m3u8" target="_blank">光华之声</a>
                             </li>
                             <li>
-                                <a href="?station=voh_fm" target="_blank">汉声 FM</a>
+                                <a href="?live=voh_fm.m3u8" target="_blank">汉声 FM</a>
                             </li>
                             <li>
-                                <a href="?station=voh_am" target="_blank">汉声 AM</a>
+                                <a href="?live=voh_am.m3u8" target="_blank">汉声 AM</a>
                             </li>
                         </ul>
                     </div>
