@@ -30,9 +30,9 @@ function validTime($unixTime) {
     $validHours = (strtotime($futureTime) - strtotime($currentTime)) / 3600;
     // 小于 1 小时则过期，返回 false，反之返回 true
     if ($validHours < 1) {
-        return true;
-    } else {
         return false;
+    } else {
+        return true;
     }
 }
 
