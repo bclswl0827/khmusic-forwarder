@@ -114,7 +114,7 @@ switch ($_GET['station']) {
                     </div>
                 </body>
             </html>';
-        throw new Exception("Value must be 1 or below");
+        throw new Exception("必须选择一个项目");
 }
 
 // 检查文件夹是否存在
