@@ -103,7 +103,7 @@ switch ($_GET['station']) {
                 </head>
                 <body>
                     <div id="msg">
-                        <p>请选择一个电台</p>
+                        <h2>请选择一个电台</h2>
                         <ul>
                             <li>
                                 <a href="?station=khmusic" target="_blank">光华之声</a>
