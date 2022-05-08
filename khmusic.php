@@ -99,7 +99,7 @@ switch ($_GET['station']) {
     default:
         echo '<html>
                 <head>
-                    <title>403 Forbidden</title>
+                    <title>500 Error</title>
                 </head>
                 <body>
                     <div id="msg">
