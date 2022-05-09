@@ -173,7 +173,7 @@ if (!is_dir($tmpDir)) {
 
 // 替换 TS 分片文件名
 $streamContents = file_get_contents($m3u8Link);
-str_replace('media_', $baseUrl . '/media_', $streamContents);
+$streamContents = str_replace('media_', $baseUrl . '/media_', $streamContents);
 
 // 返回 M3U8 内容
 header('Content-Type: application/vnd.apple.mpegurl');
