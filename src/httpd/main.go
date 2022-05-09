@@ -22,6 +22,6 @@ func main() {
 	log.Println("HTTP 端口为", config.port)
 	log.Println("HTTP 服务已经启动")
 	log.Println(
-		http.ListenAndServe(":"+config.port, http.FileServer(http.Dir("."))),
+		http.ListenAndServe(":"+config.port, http.FileServer(http.Dir(config.dir))),
 	)
 }
