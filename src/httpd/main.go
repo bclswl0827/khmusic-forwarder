@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"log"
+	"mime"
 	"net/http"
 )
 
@@ -21,6 +22,8 @@ func main() {
 	log.Println("静态文件路径为", config.dir)
 	log.Println("HTTP 端口为", config.port)
 	log.Println("HTTP 服务已经启动")
+	// 设置 m3u8 的 MIME Type
+	mime.AddExtensionType(".m3u8", "application/vnd.apple.mpegurl")
 	log.Println(
 		http.ListenAndServe(":"+config.port, http.FileServer(http.Dir(config.dir))),
 	)
