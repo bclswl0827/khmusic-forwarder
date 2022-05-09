@@ -5,11 +5,11 @@ if [ $HTTP_ENABLED ]; then
     echo "$(date '+%Y/%m/%d %H:%M:%S') HTTP 服务已被启用"
     # 在 Heroku 等平台上，存在值为随机数的 PORT 变量
     if [ $PORT ]; then
-        /usr/bin/python3 -m http.server -d /www $PORT --bind :: &
+        /usr/local/bin/httpd -p $PORT &
     else
         # 如果不存在 PORT 变量，则检查用户指定的 HTTP_PORT 变量是否存在
         if [ $HTTP_PORT ]; then
-            /usr/bin/python3 -m http.server -d /www $HTTP_PORT --bind :: &
+            /usr/local/bin/httpd -p $HTTP_PORT &
         else
             echo "$(date '+%Y/%m/%d %H:%M:%S') 没有为 HTTP 服务指定端口"
             exit 1
