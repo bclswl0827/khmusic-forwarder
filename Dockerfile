@@ -5,7 +5,8 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositorie
     && apk add --no-cache --virtual .build-deps go \
     && cd /srv/khmusic; env CGO_ENABLED=0 GOPROXY=https://goproxy.cn,direct go build -ldflags="-s -w" -o /usr/local/bin/khmusic \
     && cd /srv/voh; env CGO_ENABLED=0 GOPROXY=https://goproxy.cn,direct go build -ldflags="-s -w" -o /usr/local/bin/voh \
-    && cd /srv/httpd; env CGO_ENABLED=0 GOPROXY=https://goproxy.cn,direct go build -ldflags="-s -w" -o /usr/local/bin/httpd
+    && cd /srv/httpd; env CGO_ENABLED=0 GOPROXY=https://goproxy.cn,direct go build -ldflags="-s -w" -o /usr/local/bin/httpd \
+    && apk del .build-deps
 
 FROM alpine:latest
 
