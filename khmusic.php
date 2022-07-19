@@ -79,7 +79,7 @@ function parseVoh($stationNum) {
         stream_context_create($postData)
     );
     $jsonArray = json_decode($apiRes, true);
-    return $jsonArray['Url'] . '?token=' . $jsonArray['token'] . '&expires=' . $jsonArray['expires'];
+    return str_replace('playlist', 'chunklist', $jsonArray['Url']) . '?token=' . $jsonArray['token'] . '&expires=' . $jsonArray['expires'];
 }
 
 // 获取 URL 传递的参数
